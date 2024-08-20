@@ -36,6 +36,7 @@ public class Tables {
     @Column(insertable = false)
     @LastModifiedDate
     private LocalDateTime updatedAt;
+    private Boolean isActive;
 
     @Override
     public final boolean equals(Object o) {
