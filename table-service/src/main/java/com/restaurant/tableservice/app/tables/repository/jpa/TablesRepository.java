@@ -1,4 +1,4 @@
-package com.restaurant.tableservice.app.tables.repository;
+package com.restaurant.tableservice.app.tables.repository.jpa;
 
 import com.restaurant.tableservice.app.tables.model.Tables;
 import org.springframework.data.domain.Page;

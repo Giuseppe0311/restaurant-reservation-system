@@ -7,7 +7,7 @@ import com.restaurant.tableservice.app.tables.model.Tables;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TableMapper {
     TableDTO toTableDto(Tables tables);
     Tables toTable(TableRequest tableRequest);

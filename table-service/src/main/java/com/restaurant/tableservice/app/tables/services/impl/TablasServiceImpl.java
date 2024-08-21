@@ -5,26 +5,45 @@ import com.restaurant.tableservice.app.tables.dto.request.TableRequest;
 import com.restaurant.tableservice.app.tables.exception.TableNotFound;
 import com.restaurant.tableservice.app.tables.mapper.TableMapper;
 import com.restaurant.tableservice.app.tables.model.Tables;
-import com.restaurant.tableservice.app.tables.repository.TablesRepository;
+import com.restaurant.tableservice.app.tables.repository.custom.TablesSearchDao;
+import com.restaurant.tableservice.app.tables.repository.jpa.TablesRepository;
 import com.restaurant.tableservice.app.tables.services.TablesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class TablasServiceImpl implements TablesService {
     private final TablesRepository repository;
+    private final TablesSearchDao tablesSearchDao;
     private final TableMapper mapper;
 
-    @Override
-    public Page<TableDTO> getFilteredTables(Pageable pageable, String locationType, String tableStatus, String capacity, String keyword) {
-        return null;
-    }
 
-    public Page<TableDTO> getPaginatedTables(Pageable pageable) {
-        return repository.findAllByIsActiveTrue(pageable).map(mapper::toTableDto);
+    public Page<TableDTO> getPaginatedTables(Pageable pageable,
+                                             String locationType,
+                                             String tableStatus,
+                                             Integer capacity,
+                                             String keyword) {
+
+        int pageSize = pageable.getPageSize();
+        int offset = (int) pageable.getOffset();
+        List<TableDTO> tables = tablesSearchDao.findAllByFilter(
+                        locationType,
+                        tableStatus,
+                        capacity,
+                        keyword,
+                        offset,
+                        pageSize)
+                .stream()
+                .map(mapper::toTableDto)
+                .toList();
+        long totalElements = tablesSearchDao.countByFilter(locationType, tableStatus, capacity, keyword);
+        return new PageImpl<>(tables, pageable, totalElements);
     }
 
     @Override
@@ -51,7 +70,7 @@ public class TablasServiceImpl implements TablesService {
         repository.save(table);
     }
 
-    private Tables getById(Integer id){
+    private Tables getById(Integer id) {
         return repository.findByIdAndIsActiveTrue(id).orElseThrow(
                 () -> new TableNotFound("Table Not Found")
         );
