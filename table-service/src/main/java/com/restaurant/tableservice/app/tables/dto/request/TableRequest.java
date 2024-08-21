@@ -7,10 +7,13 @@ import jakarta.validation.constraints.NotNull;
 
 public record TableRequest(
         @NotNull
+        Integer tableNumber,
+        @NotNull
         Integer capacity,
         @NotBlank
         @NotNull
         LocationType locationType,
         @NotNull @NotBlank
-        TableStatus tableStatus) {
+        TableStatus tableStatus
+) {
 }

@@ -1,5 +1,6 @@
 package com.restaurant.tableservice.app.tables.handler;
 
+import com.restaurant.tableservice.app.tables.exception.TableAlreadyExist;
 import com.restaurant.tableservice.app.tables.exception.TableNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,13 @@ public class TableHandler {
         Map<String, String> errors = new HashMap<>();
         errors.put("message", ex.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(errors, HttpStatus.NOT_FOUND);
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+    @ExceptionHandler(TableAlreadyExist.class)
+    public ResponseEntity<ErrorResponse> handleTableAlreadyExistException(TableAlreadyExist ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", ex.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(errors, HttpStatus.BAD_REQUEST);
         return ResponseEntity.badRequest().body(errorResponse);
     }
 }

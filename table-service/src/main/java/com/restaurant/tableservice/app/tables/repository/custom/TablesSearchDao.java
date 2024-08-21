@@ -85,7 +85,7 @@ public class TablesSearchDao {
 
         if (keyword != null && !keyword.isEmpty()) {
             predicates.add(cb.or(
-                    cb.like(cb.lower(table.get("tableNumber")), "%" + keyword.toLowerCase() + "%"),
+                    cb.like(cb.lower(table.get("tableNumber").as(String.class)), "%" + keyword.toLowerCase() + "%"),
                     cb.like(cb.lower(table.get("locationType")), "%" + keyword.toLowerCase() + "%"),
                     cb.like(cb.lower(table.get("tableStatus")), "%" + keyword.toLowerCase() + "%"),
                     cb.like(cb.lower(table.get("capacity").as(String.class)), "%" + keyword.toLowerCase() + "%")

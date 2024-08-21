@@ -1,6 +1,5 @@
 package com.restaurant.tableservice.app.tables.handler;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

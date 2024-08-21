@@ -24,7 +24,7 @@ public class Tables {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String tableNumber;
+    private Integer tableNumber;
     private Integer capacity;
     @Enumerated(EnumType.STRING)
     private LocationType locationType;

@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface TablesRepository extends JpaRepository<Tables,Integer> {
     Page<Tables> findAllByIsActiveTrue(Pageable pageable);
     Optional<Tables> findByIdAndIsActiveTrue(Integer id);
+    boolean existsByTableNumberAndIsActiveTrue(Integer id);
 
 }

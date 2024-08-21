@@ -2,6 +2,7 @@ package com.restaurant.tableservice.app.tables.services.impl;
 
 import com.restaurant.tableservice.app.tables.dto.dto.TableDTO;
 import com.restaurant.tableservice.app.tables.dto.request.TableRequest;
+import com.restaurant.tableservice.app.tables.exception.TableAlreadyExist;
 import com.restaurant.tableservice.app.tables.exception.TableNotFound;
 import com.restaurant.tableservice.app.tables.mapper.TableMapper;
 import com.restaurant.tableservice.app.tables.model.Tables;
@@ -53,6 +54,10 @@ public class TablasServiceImpl implements TablesService {
 
     @Override
     public void saveTable(TableRequest tableRequest) {
+        boolean alredyExist = repository.existsByTableNumberAndIsActiveTrue(tableRequest.tableNumber());
+        if (alredyExist) {
+            throw new TableAlreadyExist("Table Already Exist");
+        }
         repository.save(mapper.toTable(tableRequest));
     }
 
