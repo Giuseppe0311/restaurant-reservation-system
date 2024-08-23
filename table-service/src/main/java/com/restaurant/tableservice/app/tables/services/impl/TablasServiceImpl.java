@@ -6,10 +6,11 @@ import com.restaurant.tableservice.app.tables.exception.TableAlreadyExist;
 import com.restaurant.tableservice.app.tables.exception.TableNotFound;
 import com.restaurant.tableservice.app.tables.mapper.TableMapper;
 import com.restaurant.tableservice.app.tables.model.Tables;
-import com.restaurant.tableservice.app.tables.repository.custom.TablesSearchDao;
+import com.restaurant.tableservice.app.tables.repository.criteria.TablesSearchDao;
 import com.restaurant.tableservice.app.tables.repository.jpa.TablesRepository;
 import com.restaurant.tableservice.app.tables.services.TablesService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TablasServiceImpl implements TablesService {
     private final TablesRepository repository;
     private final TablesSearchDao tablesSearchDao;
@@ -56,6 +58,7 @@ public class TablasServiceImpl implements TablesService {
     public void saveTable(TableRequest tableRequest) {
         boolean alredyExist = repository.existsByTableNumberAndIsActiveTrue(tableRequest.tableNumber());
         if (alredyExist) {
+            log.warn("Table Already Exist");
             throw new TableAlreadyExist("Table Already Exist");
         }
         repository.save(mapper.toTable(tableRequest));
@@ -63,6 +66,7 @@ public class TablasServiceImpl implements TablesService {
 
     @Override
     public void updateTable(TableRequest tableRequest, Integer id) {
+        log.info("Updating Table with id: {}", id);
         Tables table = getById(id);
         mapper.updateTableFromDto(tableRequest, table);
         repository.save(table);
@@ -70,6 +74,7 @@ public class TablasServiceImpl implements TablesService {
 
     @Override
     public void deleteTable(Integer id) {
+        log.info("Deleting Table with id: {}", id);
         Tables table = getById(id);
         table.setIsActive(false);
         repository.save(table);
@@ -77,7 +82,10 @@ public class TablasServiceImpl implements TablesService {
 
     private Tables getById(Integer id) {
         return repository.findByIdAndIsActiveTrue(id).orElseThrow(
-                () -> new TableNotFound("Table Not Found")
+                () -> {
+                    log.warn("Table Not Found with id: {}", id);
+                    return new TableNotFound("Table Not Found");
+                }
         );
     }
 }

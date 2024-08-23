@@ -1,4 +1,4 @@
-package com.restaurant.tableservice.app.tables.repository.custom;
+package com.restaurant.tableservice.app.tables.repository.criteria;
 
 import com.restaurant.tableservice.app.tables.model.Tables;
 import jakarta.persistence.EntityManager;
