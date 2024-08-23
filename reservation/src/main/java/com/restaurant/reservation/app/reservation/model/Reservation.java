@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
@@ -30,7 +31,7 @@ public class Reservation {
     @NotNull
     private Integer tableId;
     private LocalDate reservationDate;
-    private String reservationTime;
+    private LocalTime reservationTime;
     @Enumerated(EnumType.STRING)
     private ReservationType reservationType;
     @CreatedDate
