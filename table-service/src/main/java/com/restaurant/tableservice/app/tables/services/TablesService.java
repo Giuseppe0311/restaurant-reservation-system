@@ -2,7 +2,6 @@ package com.restaurant.tableservice.app.tables.services;
 
 import com.restaurant.tableservice.app.tables.dto.dto.TableDTO;
 import com.restaurant.tableservice.app.tables.dto.request.TableRequest;
-import com.restaurant.tableservice.app.tables.model.Tables;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

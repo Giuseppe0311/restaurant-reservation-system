@@ -1,6 +1,7 @@
 package com.restaurant.reservation.app.reservation.handler;
 
 import com.restaurant.reservation.app.reservation.exceptions.ReservationNotFound;
+import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,6 +19,13 @@ public class ReservationHandler {
         ex.getBindingResult().getFieldErrors().forEach(fieldError ->
                 errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
 
+        ErrorResponse errorResponse = new ErrorResponse(errors, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ErrorResponse> handleFeignException(FeignException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", ex.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(errors, HttpStatus.BAD_REQUEST);
         return ResponseEntity.badRequest().body(errorResponse);
     }

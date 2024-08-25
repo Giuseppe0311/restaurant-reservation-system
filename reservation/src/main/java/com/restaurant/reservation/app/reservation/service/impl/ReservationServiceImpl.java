@@ -1,8 +1,10 @@
 package com.restaurant.reservation.app.reservation.service.impl;
 
+import com.restaurant.reservation.app.reservation.client.TableFeingClient;
 import com.restaurant.reservation.app.reservation.dto.dto.ReservationDTO;
 import com.restaurant.reservation.app.reservation.dto.request.ReservationRequest;
 import com.restaurant.reservation.app.reservation.dto.request.SearchReservationRequest;
+import com.restaurant.reservation.app.reservation.dto.response.TableResponse;
 import com.restaurant.reservation.app.reservation.exceptions.ReservationNotFound;
 import com.restaurant.reservation.app.reservation.mapper.ReservationMapper;
 import com.restaurant.reservation.app.reservation.repository.criteria.ReservationSearchDao;
@@ -24,6 +26,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final ReservationSearchDao reservationSearchDao;
     private final ReservationMapper reservationMapper;
+    private final TableFeingClient tableFeingClient;
 
     @Override
     public Page<ReservationDTO> getAll(Pageable pageable, SearchReservationRequest searchReservationRequest) {
@@ -49,9 +52,16 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    //TODO: validate table id and handle exception
     public void create(ReservationRequest reservationRequest) {
-
         //OPEN FEIGN WILL BE IMPLEMENTED HERE
+        // validated table id
+       TableResponse response = tableFeingClient.getTableById(reservationRequest.tableId());
+       // going to be tested
+        if (response == null) {
+            throw new RuntimeException("Table not found with id: " + reservationRequest.tableId());
+        }
+
     }
 
     @Override
